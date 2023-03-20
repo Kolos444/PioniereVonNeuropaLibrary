@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
 using PioniereVonNeuropaLibrary;
 
 namespace TestApp{
@@ -23,12 +24,15 @@ namespace TestApp{
 		public MainWindow() {
 			InitializeComponent();
 
-			Game   game      = new Game(5, 5);
-			string serialize = JsonSerializer.Serialize(game, new JsonSerializerOptions { WriteIndented = true });
-			Console.Out.WriteLine(serialize);
+			OpenFileDialog fileDialog = new OpenFileDialog();
 
-			Game deserialize = JsonSerializer.Deserialize<Game>(serialize) ?? throw new InvalidOperationException();
-			Console.Out.WriteLine("");
+			if (fileDialog.ShowDialog() == true){
+				Game deserialize = JsonSerializer.Deserialize<Game>(fileDialog.OpenFile()) ?? throw new InvalidOperationException();
+				Game.MakePlayable(deserialize);
+				Console.Out.WriteLine("");
+			}
+
+
 		}
 	}
 }

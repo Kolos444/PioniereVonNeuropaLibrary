@@ -1,8 +1,13 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Windows.Documents;
 
 namespace PioniereVonNeuropaLibrary;
 
 public class Game{
+	private static Random _random = new(DateTime.Now.Nanosecond);
+
 	/// <remarks>
 	/// Only for JSONSerilization
 	/// </remarks>
@@ -508,21 +513,62 @@ public class Game{
 			} else if (tile is { Harbour: true, Resource: Resource.None }){
 				if (HasGeneratedNeighbourHarbour(tile, game))
 					MakeWaterTile(tile);
-				else
+				else if (game.Settings.HarbourSettings.Harbours >= 0){
 					tile.Resource = GetRandomHarbourResource(logicSettings.HarbourSettings);
+					MakeHarbourConnections(tile, game);
+				} else{
+					MakeWaterTile(tile);
+				}
 			}
 		}
 	}
 
-	private static void MakeWaterTile(Tile tile) {
+	private static void MakeHarbourConnections(Tile tile, Game game) {
+		foreach (int tileNeighbour in tile.Neighbours){
+			if (tileNeighbour == 0)
+				continue;
+
+			if (!game.Tiles[tileNeighbour].Land)
+				continue;
+
+			List<int> connections = new List<int>(2);
+			foreach (int node in game.Tiles[tileNeighbour].Nodes)
+				foreach (int tileNode in tile.Nodes)
+					if (node == tileNode)
+						connections.Add(node);
+
+			for (int index = 0; index < tile.Nodes.Length; index++)
+				if (!connections.Contains(tile.Nodes[index]))
+					tile.Nodes[index] = 0;
+		}
+	}
+
+	public static void MakeWaterTile(Tile tile) {
 		tile.Resource = Resource.None;
 		tile.Land     = false;
 		tile.Harbour  = false;
 		tile.Value    = 0;
 	}
 
+	public static void MakeHarbourTile(Tile tile, Resource resource = Resource.None) {
+		tile.Resource = resource;
+		tile.Land     = false;
+		tile.Harbour  = true;
+		tile.Value    = 0;
+	}
+
+	public static void MakeLandTile(Tile tile, Resource resource = Resource.None) {
+		tile.Resource = resource;
+		tile.Land     = true;
+		tile.Harbour  = false;
+	}
+
 	private static bool HasGeneratedNeighbourHarbour(Tile tile, Game game) {
 		foreach (int tileNeighbour in tile.Neighbours){
+			if (tileNeighbour == 0){
+				continue;
+			}
+
 			if (game.Tiles[tileNeighbour - 1].Harbour && game.Tiles[tileNeighbour - 1].ID < tile.ID){
 				return true;
 			}
@@ -532,10 +578,13 @@ public class Game{
 	}
 
 	private static Resource GetRandomResource(Settings settings) {
-		Random random = new(DateTime.Now.Nanosecond);
-		int next = random.Next(settings.Brick + settings.Wood + settings.Wheat + settings.Sheep +
-							   settings.Ore   + settings.Deserts
-		);
+		if (settings.Brick + settings.Wood + settings.Wheat + settings.Sheep +
+		    settings.Ore   + settings.Deserts == 0)
+			settings = new() { Brick = 1, Ore = 1, Wood = 1, Wheat = 1, Sheep = 1 };
+
+		int next = _random.Next(settings.Brick + settings.Wood + settings.Wheat + settings.Sheep +
+								settings.Ore   + settings.Deserts);
+
 		if (next < settings.Brick){
 			settings.Brick--;
 			return Resource.Brick;
@@ -567,11 +616,18 @@ public class Game{
 	}
 
 	private static int GetRandomValue(DiceValues diceValue) {
-		Random random = new(DateTime.Now.Nanosecond);
-		int next = random.Next(diceValue.Two    + diceValue.Three + diceValue.Four  + diceValue.Five +
-							   diceValue.Six    + diceValue.Seven + diceValue.Eight + diceValue.Nine + diceValue.Ten +
-							   diceValue.Eleven + diceValue.Twelve
+		if (diceValue.Two    + diceValue.Three + diceValue.Four  + diceValue.Five +
+		    diceValue.Six    + diceValue.Seven + diceValue.Eight + diceValue.Nine + diceValue.Ten +
+		    diceValue.Eleven + diceValue.Twelve == 0){
+			diceValue = new(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+		}
+
+		int next = _random.Next(diceValue.Two    + diceValue.Three + diceValue.Four  + diceValue.Five +
+								diceValue.Six    + diceValue.Seven + diceValue.Eight + diceValue.Nine + diceValue.Ten +
+								diceValue.Eleven + diceValue.Twelve
 		);
+
+
 		if (next < diceValue.Two){
 			diceValue.Two--;
 			return 2;
@@ -633,9 +689,8 @@ public class Game{
 	}
 
 	private static Resource GetRandomHarbourResource(HarbourSettings settings) {
-		Random random = new(DateTime.Now.Nanosecond);
-		int next = random.Next(settings.Brick + settings.Wood + settings.Wheat + settings.Sheep +
-							   settings.Ore);
+		int next = _random.Next(settings.Brick + settings.Wood + settings.Wheat + settings.Sheep +
+								settings.Ore);
 		if (next < settings.Brick){
 			settings.Brick--;
 			settings.Harbours--;
