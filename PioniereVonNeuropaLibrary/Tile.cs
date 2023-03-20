@@ -4,9 +4,9 @@ namespace PioniereVonNeuropaLibrary;
 
 public class Tile{
 	private Tile() {
-		Neighbours = Array.Empty<Tile>();
-		Roads      = Array.Empty<Road>();
-		Nodes      = Array.Empty<Node>();
+		Neighbours = new int[6];
+		Nodes      = new int[6];
+		Roads      = new int[6];
 	}
 
 	public Tile(int ID) : this() {
@@ -17,8 +17,9 @@ public class Tile{
 	public Resource Resource { get; set; }
 	public int      Value    { get; set; }
 	public bool     Harbour  { get; set; }
+	public bool     Land  { get; set; }
 
-	public Tile[] Neighbours { get; set; }
-	public Node[] Nodes      { get; set; }
-	public Road[] Roads      { get; set; }
+	public int[] Neighbours { get; set; }
+	public int[] Nodes      { get; set; }
+	public int[] Roads      { get; set; }
 }

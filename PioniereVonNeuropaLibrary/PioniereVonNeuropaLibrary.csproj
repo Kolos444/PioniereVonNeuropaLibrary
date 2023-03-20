@@ -6,4 +6,13 @@
         <UseWPF>true</UseWPF>
     </PropertyGroup>
 
+    <ItemGroup>
+      <None Remove="Images\Brick.jpg" />
+      <None Remove="Images\Ocean.jpeg" />
+      <None Remove="Images\Ore.jpg" />
+      <None Remove="Images\Sheep.jpg" />
+      <None Remove="Images\Wheat.jpg" />
+      <None Remove="Images\Wood.jpg" />
+    </ItemGroup>
+
 </Project>
