@@ -615,14 +615,14 @@ public class Game{
 	}
 
 	private static int GetRandomValue(DiceValues diceValue) {
-		if (diceValue.Two    + diceValue.Three + diceValue.Four  + diceValue.Five +
-		    diceValue.Six     + diceValue.Eight + diceValue.Nine + diceValue.Ten +
+		if (diceValue.Two    + diceValue.Three + diceValue.Four + diceValue.Five +
+		    diceValue.Six    + diceValue.Eight + diceValue.Nine + diceValue.Ten  +
 		    diceValue.Eleven + diceValue.Twelve == 0){
-			diceValue = new(1, 1, 1, 1, 1,  1, 1, 1, 1, 1);
+			diceValue = new(1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
 		}
 
-		int next = _random.Next(diceValue.Two    + diceValue.Three + diceValue.Four  + diceValue.Five +
-								diceValue.Six     + diceValue.Eight + diceValue.Nine + diceValue.Ten +
+		int next = _random.Next(diceValue.Two    + diceValue.Three + diceValue.Four + diceValue.Five +
+								diceValue.Six    + diceValue.Eight + diceValue.Nine + diceValue.Ten  +
 								diceValue.Eleven + diceValue.Twelve
 		);
 
@@ -654,25 +654,25 @@ public class Game{
 		}
 
 		if (next < diceValue.Two + diceValue.Three + diceValue.Four + diceValue.Five +
-		    diceValue.Six         + diceValue.Eight){
+		    diceValue.Six        + diceValue.Eight){
 			diceValue.Eight--;
 			return 8;
 		}
 
-		if (next < diceValue.Two + diceValue.Three + diceValue.Four  + diceValue.Five +
-		    diceValue.Six         + diceValue.Eight + diceValue.Nine){
+		if (next < diceValue.Two + diceValue.Three + diceValue.Four + diceValue.Five +
+		    diceValue.Six        + diceValue.Eight + diceValue.Nine){
 			diceValue.Nine--;
 			return 9;
 		}
 
-		if (next < diceValue.Two + diceValue.Three + diceValue.Four  + diceValue.Five +
-		    diceValue.Six         + diceValue.Eight + diceValue.Nine + diceValue.Ten){
+		if (next < diceValue.Two + diceValue.Three + diceValue.Four + diceValue.Five +
+		    diceValue.Six        + diceValue.Eight + diceValue.Nine + diceValue.Ten){
 			diceValue.Ten--;
 			return 10;
 		}
 
 		if (next < diceValue.Two + diceValue.Three + diceValue.Four + diceValue.Five +
-		    diceValue.Six  + diceValue.Eight + diceValue.Nine + diceValue.Ten + diceValue.Eleven){
+		    diceValue.Six        + diceValue.Eight + diceValue.Nine + diceValue.Ten  + diceValue.Eleven){
 			diceValue.Eleven--;
 			return 11;
 		}
@@ -723,4 +723,21 @@ public class Game{
 		settings.Harbours--;
 		return Resource.Desert;
 	}
+
+	public static bool MakeRoadPlayer(Road road, Player player) {
+		if (road.Player != 0)
+			return false;
+
+		if (player.Resources[Resource.Brick] > 1){
+			return false;
+		}
+
+		road.Player = player.PlayerNumber;
+		return true;
+	}
+}
+
+public class Player{
+	public int PlayerNumber { get; set; }
+	public Dictionary<Resource,int> Resources    { get; set; }
 }
