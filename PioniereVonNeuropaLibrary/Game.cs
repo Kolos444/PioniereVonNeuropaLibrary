@@ -528,11 +528,11 @@ public class Game{
 			if (tileNeighbour == 0)
 				continue;
 
-			if (!game.Tiles[tileNeighbour].Land)
+			if (!game.Tiles[tileNeighbour-1].Land)
 				continue;
 
 			List<int> connections = new List<int>(2);
-			foreach (int node in game.Tiles[tileNeighbour].Nodes)
+			foreach (int node in game.Tiles[tileNeighbour-1].Nodes)
 				foreach (int tileNode in tile.Nodes)
 					if (node == tileNode)
 						connections.Add(node);
