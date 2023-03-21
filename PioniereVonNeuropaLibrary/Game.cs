@@ -616,13 +616,13 @@ public class Game{
 
 	private static int GetRandomValue(DiceValues diceValue) {
 		if (diceValue.Two    + diceValue.Three + diceValue.Four  + diceValue.Five +
-		    diceValue.Six    + diceValue.Seven + diceValue.Eight + diceValue.Nine + diceValue.Ten +
+		    diceValue.Six     + diceValue.Eight + diceValue.Nine + diceValue.Ten +
 		    diceValue.Eleven + diceValue.Twelve == 0){
-			diceValue = new(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+			diceValue = new(1, 1, 1, 1, 1,  1, 1, 1, 1, 1);
 		}
 
 		int next = _random.Next(diceValue.Two    + diceValue.Three + diceValue.Four  + diceValue.Five +
-								diceValue.Six    + diceValue.Seven + diceValue.Eight + diceValue.Nine + diceValue.Ten +
+								diceValue.Six     + diceValue.Eight + diceValue.Nine + diceValue.Ten +
 								diceValue.Eleven + diceValue.Twelve
 		);
 
@@ -654,31 +654,25 @@ public class Game{
 		}
 
 		if (next < diceValue.Two + diceValue.Three + diceValue.Four + diceValue.Five +
-		    diceValue.Six        + diceValue.Seven){
-			diceValue.Seven--;
-			return 7;
-		}
-
-		if (next < diceValue.Two + diceValue.Three + diceValue.Four + diceValue.Five +
-		    diceValue.Six        + diceValue.Seven + diceValue.Eight){
+		    diceValue.Six         + diceValue.Eight){
 			diceValue.Eight--;
 			return 8;
 		}
 
 		if (next < diceValue.Two + diceValue.Three + diceValue.Four  + diceValue.Five +
-		    diceValue.Six        + diceValue.Seven + diceValue.Eight + diceValue.Nine){
+		    diceValue.Six         + diceValue.Eight + diceValue.Nine){
 			diceValue.Nine--;
 			return 9;
 		}
 
 		if (next < diceValue.Two + diceValue.Three + diceValue.Four  + diceValue.Five +
-		    diceValue.Six        + diceValue.Seven + diceValue.Eight + diceValue.Nine + diceValue.Ten){
+		    diceValue.Six         + diceValue.Eight + diceValue.Nine + diceValue.Ten){
 			diceValue.Ten--;
 			return 10;
 		}
 
 		if (next < diceValue.Two + diceValue.Three + diceValue.Four + diceValue.Five +
-		    diceValue.Six + diceValue.Seven + diceValue.Eight + diceValue.Nine + diceValue.Ten + diceValue.Eleven){
+		    diceValue.Six  + diceValue.Eight + diceValue.Nine + diceValue.Ten + diceValue.Eleven){
 			diceValue.Eleven--;
 			return 11;
 		}

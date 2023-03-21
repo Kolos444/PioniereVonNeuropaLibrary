@@ -37,13 +37,13 @@ public class Settings{
 
 public class DiceValues{
 	public DiceValues() { }
-	public DiceValues(int two, int three, int four, int five, int six, int seven, int eight, int nine, int ten, int eleven, int twelve) {
+	public DiceValues(int two, int three, int four, int five, int six, int eight, int nine, int ten, int eleven, int twelve) {
 		Two    = two;
 		Three  = three;
 		Four   = four;
 		Five   = five;
 		Six    = six;
-		Seven  = seven;
+		//7 Hat hier nichts zu suchen
 		Eight  = eight;
 		Nine   = nine;
 		Ten    = ten;
