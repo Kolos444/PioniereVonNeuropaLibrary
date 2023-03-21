@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Documents;
 
 namespace PioniereVonNeuropaLibrary;
@@ -524,22 +525,20 @@ public class Game{
 	}
 
 	private static void MakeHarbourConnections(Tile tile, Game game) {
-		foreach (int tileNeighbour in tile.Neighbours){
+		for (int direction = 0; direction < tile.Neighbours.Length; direction++){
+			int tileNeighbour = tile.Neighbours[direction];
 			if (tileNeighbour == 0)
 				continue;
 
-			if (!game.Tiles[tileNeighbour-1].Land)
+			if (!game.Tiles[tileNeighbour - 1].Land)
 				continue;
 
-			List<int> connections = new List<int>(2);
-			foreach (int node in game.Tiles[tileNeighbour-1].Nodes)
-				foreach (int tileNode in tile.Nodes)
-					if (node == tileNode)
-						connections.Add(node);
+			for (int i = 0; i < tile.Nodes.Length; i++){
+				if (i != direction && i != (direction == 5 ? 0 : direction + 1))
+					tile.Nodes[i] = 0;
+			}
 
-			for (int index = 0; index < tile.Nodes.Length; index++)
-				if (!connections.Contains(tile.Nodes[index]))
-					tile.Nodes[index] = 0;
+			return;
 		}
 	}
 
