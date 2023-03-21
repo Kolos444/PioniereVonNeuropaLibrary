@@ -738,6 +738,11 @@ public class Game{
 }
 
 public class Player{
+	public Player() { }
+	public Player(int playerNumber, Dictionary<Resource, int> resources) {
+		PlayerNumber = playerNumber;
+		Resources    = resources;
+	}
 	public int PlayerNumber { get; set; }
 	public Dictionary<Resource,int> Resources    { get; set; }
 }
